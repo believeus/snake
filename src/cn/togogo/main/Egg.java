@@ -1,12 +1,14 @@
 package cn.togogo.main;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Random;
 
 public class Egg {
 	protected int x;
 	protected int y;
 	protected Color color;
-	
+
 	public int getX() {
 		return x;
 	}
@@ -30,13 +32,21 @@ public class Egg {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public Egg(){
-		x=Math.abs(((int)(Math.random()*10)-2)*100);
-		y=Math.abs(((int)(Math.random()*8)-2)*100);
-		//颜色随机
-		color = new Color(50 + (int) (Math.random() * 205), 50 + (int) (Math.random() * 205),50 + (int) (Math.random() * 205));
+
+	public Egg() {
+		Random random = new Random();
+		// x,y坐标随机
+		x = random.nextInt(40)*20;
+		y = random.nextInt(30)*20;
+		// 颜色随机
+		color = new Color(50 + (int) (Math.random() * 205),50 + (int) (Math.random() * 205),50 + (int) (Math.random() * 205));
 	}
 
-	
-	
+	public void draw(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(this.color);
+		g.fillOval(x, y, 20, 20);
+		g.setColor(c);
+	}
+
 }

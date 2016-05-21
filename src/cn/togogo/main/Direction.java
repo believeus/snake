@@ -1,7 +1,7 @@
 package cn.togogo.main;
 
 public enum Direction {
-	UP(1), LEFT(2), RIGHT(-2), DOWN(-1),STOP(3);
+	UP(1), LEFT(2), RIGHT(-2), DOWN(-1);
 	private int value;
 
 	public int value() {
@@ -23,9 +23,6 @@ public enum Direction {
 			return DOWN;
 		case -2:
 			return RIGHT;
-		case 3:
-			return STOP;
-		
 		default:
 			return null;
 		}
