@@ -8,6 +8,19 @@ public class Egg {
 	protected int x;
 	protected int y;
 	protected Color color;
+	protected boolean isLive;
+
+	public Egg() {
+		Random random = new Random();
+		// x,y坐标随机
+		x = random.nextInt(40) * 20;
+		y = random.nextInt(30) * 20;
+		// 颜色随机
+		color = new Color(50 + (int) (Math.random() * 205),
+				50 + (int) (Math.random() * 205),
+				50 + (int) (Math.random() * 205));
+		this.isLive = true;
+	}
 
 	public int getX() {
 		return x;
@@ -33,13 +46,12 @@ public class Egg {
 		this.color = color;
 	}
 
-	public Egg() {
-		Random random = new Random();
-		// x,y坐标随机
-		x = random.nextInt(40)*20;
-		y = random.nextInt(30)*20;
-		// 颜色随机
-		color = new Color(50 + (int) (Math.random() * 205),50 + (int) (Math.random() * 205),50 + (int) (Math.random() * 205));
+	public boolean isLive() {
+		return isLive;
+	}
+
+	public void setLive(boolean isLive) {
+		this.isLive = isLive;
 	}
 
 	public void draw(Graphics g) {

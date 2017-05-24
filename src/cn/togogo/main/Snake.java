@@ -115,12 +115,8 @@ public class Snake {
 	}
 
 	public void eat(Egg egg) {
-		if (egg instanceof QuickEgg) {
-			int speed = ((QuickEgg) egg).getSpeed();
-			this.setSpeed((getSpeed()-speed));
-		} else if (egg instanceof Egg) {
-			Snode snode = new Snode(egg.getX(), egg.getY(), egg.getColor());
-			snake.add(snode);
-		}
+		egg.setLive(false);
+		Snode snode = new Snode(egg.getX(), egg.getY(), egg.getColor());
+		snake.add(snode);
 	}
 }

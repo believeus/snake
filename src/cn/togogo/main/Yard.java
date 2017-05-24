@@ -9,34 +9,29 @@ import javax.swing.JPanel;
 public class Yard extends JPanel {
 	private static final long serialVersionUID = 8018986092730399936L;
 	private Snake snake;
-	private Egg egg;
-	private Egg quickEgg;
 	private int width;
 	private int height;
 	private boolean isrunning;
-	private boolean isclear;
 	private Thread timmer;
-	
+	private EggFactory engin;
 
 	public Yard() {
 		this.isrunning = true;
-		this.isclear=false;
 		this.width = Variables.WIDTH;
 		this.height = Variables.HEIGHT;
 		this.setSize(width, height);
 		this.setLocation(300, 0);
 		this.setBackground(Color.WHITE);
 		this.setVisible(true);
-		this.egg = new Egg();
-		this.quickEgg=new QuickEgg();
 		this.snake = new Snake();
+		engin = new EggFactory();
 		this.timmer = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
 					while (true) {
-						/**在多线程中套双层循环需要休眠5毫秒,要不然内部循环不起作用*/
+						/** 在多线程中套双层循环需要休眠5毫秒,要不然内部循环不起作用 */
 						Thread.sleep(5);
 						while (isrunning) {
 							Thread.sleep(snake.getSpeed());
@@ -50,6 +45,23 @@ public class Yard extends JPanel {
 			}
 		});
 		timmer.start();
+		// 创建一个线程生产蛋蛋
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(300);
+						engin.buildEgg();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}).start();
+
 	}
 
 	public void listenKeyPress(KeyEvent e) {
@@ -96,30 +108,24 @@ public class Yard extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		this.draw(g);
-		snake.draw(g);
-		egg = ((egg == null) ? new Egg() : egg);
-		egg.draw(g);
-		/** 蛇吃到蛋 */
-		if (snake.getX() == egg.getX() && snake.getY() == egg.getY()) {
-			snake.eat(egg);
-			isclear=true;
+		try {
+			this.draw(g);
+			snake.draw(g);
+			Egg egg = engin.getEgg();
+			egg.draw(g);
+			/** 蛇吃到蛋 */
+			if (snake.getX() == egg.getX() && snake.getY() == egg.getY()) {
+				snake.eat(egg);
+			}
+
+			/** 撞墙 */
+			if (snake.getX() == 0 || snake.getY() == 0
+					|| snake.getX() == width - 20 || snake.getY() > height - 40) {
+				isrunning = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		/**吃到加速蛋*/
-		quickEgg=(quickEgg==null)?new QuickEgg():quickEgg;
-		quickEgg.draw(g);
-		if (snake.getX() == quickEgg.getX() && snake.getY() == quickEgg.getY()) {
-			snake.eat(quickEgg);
-			isclear=true;
-		}
-		/** 撞墙 */
-		if (snake.getX() ==0 || snake.getY() ==0 || snake.getX() == width - 20|| snake.getY() > height - 40) {
-			isrunning = false;
-		}
-		if(isclear){
-			isclear=false;
-			egg=null;
-			quickEgg=null;
-		}
+
 	}
 }

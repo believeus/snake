@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 public class Main {
 	public static void main(String[] args) {
 		JFrame frame=new JFrame();
+		frame.setLocation(200, 100);
 	    int width=Variables.WIDTH;
 	    int height=Variables.HEIGHT+20;
 	    frame.setSize(width, height);
